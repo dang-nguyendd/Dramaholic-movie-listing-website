@@ -1,0 +1,127 @@
+@use "../abstract/colors";
+@use "../utilities/mixins";
+
+.skeleton {
+  animation: skeleton-loading 1s linear infinite alternate;
+}
+@keyframes skeleton-loading {
+  0% {
+    background-color: #1a1a1a;
+  }
+  25% {
+    background-color: #333;
+  }
+  50% {
+    background-color: #1a1a1a;
+  }
+  100% {
+    background-color: #1a1a1a;
+  }
+}
+
+.card {
+  display: grid;
+  line-height: 1.6;
+  width: 95%;
+  z-index: -1;
+
+  transition: transform 500ms ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+  &:hover .card-title:after {
+    transform: scaleX(1);
+  }
+  &:hover .card-content,
+  &:focus-within .card-content {
+    transform: translateY(0);
+    transition: transform 500ms ease;
+    transition-delay: 500ms;
+  }
+  &:focus-within .card-content {
+    transition-duration: 0ms;
+  }
+  &:hover,
+  &:focus-within {
+    transform: scale(0.95);
+  }
+
+  .card-content > *:not(.card-title) {
+    opacity: 0;
+    transition: opacity 500ms linear;
+  }
+
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+    margin-top: -12em;
+    z-index: 1;
+    --padding: 1.5rem;
+    padding: var(--padding);
+    background: linear-gradient(
+      hsl(0 0% 0% / 0),
+      hsl(20 0% 0% / 0.3) 20%,
+      colors.$black
+    );
+    overflow: hidden;
+    transform: translateY(65%);
+  }
+
+  &:hover .card-content > *:not(.card-title),
+  &:focus-within .card-content > *:not(.card-title) {
+    opacity: 1;
+    transition-delay: 1000ms;
+  }
+
+  .card-title {
+    position: relative;
+    font-size: 1.2rem;
+    white-space: nowrap;
+    overflow: hidden !important;
+  }
+  .card-title::after {
+    content: "";
+    position: absolute;
+    height: 4px;
+    left: calc(var(--padding) * -1);
+    bottom: -3px;
+    width: calc(100% + var(--padding));
+
+    background-color: colors.$red-light;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 500ms ease;
+  }
+  .card-body {
+    padding-top: 0.5em;
+    @include mixins.text-ellipsis($lines: 2);
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+  }
+  .button {
+    @include mixins.button-style();
+    width: 8rem;
+  }
+  .button:hover,
+  .button:focus {
+    cursor: pointer;
+    background-color: colors.$white;
+    color: colors.$red;
+  }
+}
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  transform: scale(1.1);
+  background-color: rgba(20, 20, 20, 0.5);
+  color: #fff !important;
+}
+/* Swipe */
+@media (min-width: 62em) {
+  .card-title {
+    position: relative;
+    font-size: 1.2rem;
+    overflow-wrap: break-word;
+  }
+}
